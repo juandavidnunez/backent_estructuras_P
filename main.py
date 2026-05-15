@@ -12,6 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import api.state as state
 from api.router_events import router as events_router
+from api.router_graph import router as graph_router
+from api.router_dynamic import router as dynamic_router
 from api.router_plan import router as plan_router
 from api.router_report import router as report_router
 from config import API_PREFIX, CORS_ORIGINS, JSON_NETWORK_PATH
@@ -53,9 +55,11 @@ app.add_middleware(
 # Router registration
 # ---------------------------------------------------------------------------
 
-app.include_router(plan_router, prefix=f"{API_PREFIX}/plan", tags=["R2 — Planning"])
-app.include_router(events_router, prefix=f"{API_PREFIX}/events", tags=["R4 — Interruptions"])
-app.include_router(report_router, prefix=f"{API_PREFIX}/report", tags=["R5 — Reports"])
+app.include_router(graph_router,   prefix=f"{API_PREFIX}/graph",   tags=["R1 — Graph"])
+app.include_router(plan_router,    prefix=f"{API_PREFIX}/plan",    tags=["R2 — Planning"])
+app.include_router(dynamic_router, prefix=f"{API_PREFIX}/dynamic", tags=["R3 — Dynamic"])
+app.include_router(events_router,  prefix=f"{API_PREFIX}/events",  tags=["R4 — Interruptions"])
+app.include_router(report_router,  prefix=f"{API_PREFIX}/report",  tags=["R5 — Reports"])
 
 
 @app.get("/", tags=["Health"])
