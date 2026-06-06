@@ -206,9 +206,7 @@ class TestFlyTo:
     def test_raises_if_dest_already_visited(self, small_graph):
         state = start_trip(small_graph, "BOG", 500.0, 24.0)
         fly_to(small_graph, state, "MDE", "Avión Comercial")
-        # Go back to BOG (MDE -> BOG exists)
-        fly_to(small_graph, state, "BOG", "Avión Comercial")
-        # BOG is now visited — trying to fly there again must raise
+        # BOG was already visited as the trip origin, so returning should fail.
         with pytest.raises(ValueError, match="already been visited"):
             fly_to(small_graph, state, "BOG", "Avión Comercial")
 

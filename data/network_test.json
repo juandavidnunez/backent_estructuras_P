@@ -199,6 +199,25 @@
         { "nombre": "Asistente administrativo", "tarifaHora": 4.5, "maxHoras": 8 },
         { "nombre": "Maletero",                 "tarifaHora": 4.0, "maxHoras": 6 }
       ]
+    },
+    {
+      "id": "CTG",
+      "nombre": "Aeropuerto Internacional Rafael Núñez",
+      "ciudad": "Cartagena",
+      "pais": "Colombia",
+      "zonaHoraria": "America/Bogota",
+      "esHub": false,
+      "costoAlojamiento": 42.0,
+      "costoAlimentacion": 11.0,
+      "aerolineas": ["Avianca", "LATAM"],
+      "actividades": [
+        { "nombre": "Tour Ciudad Amurallada", "tipo": "opcional", "duracionMin": 150, "costoUSD": 12.0 },
+        { "nombre": "Visita Playa Blanca",       "tipo": "opcional", "duracionMin": 120, "costoUSD": 0.0 }
+      ],
+      "trabajos": [
+        { "nombre": "Asistente de rampa", "tarifaHora": 5.5, "maxHoras": 8 },
+        { "nombre": "Maletero",          "tarifaHora": 5.0, "maxHoras": 6 }
+      ]
     }
   ],
   "rutas": [
@@ -219,6 +238,7 @@
     { "origen": "SCL", "destino": "MVD", "distanciaKm": 1900, "aeronaves": ["Avión Comercial"],                   "costoBase": -1, "estanciaMinima": 180 },
     { "origen": "MVD", "destino": "SCL", "distanciaKm": 1900, "aeronaves": ["Avión Comercial"],                   "costoBase": -1, "estanciaMinima": 180 },
     { "origen": "MVD", "destino": "ASU", "distanciaKm": 960,  "aeronaves": ["Avión Comercial", "Avión Regional"], "costoBase": -1, "estanciaMinima": 120 },
-    { "origen": "ASU", "destino": "LIM", "distanciaKm": 2100, "aeronaves": ["Avión Comercial"],                   "costoBase": -1, "estanciaMinima": 180 }
+    { "origen": "ASU", "destino": "LIM", "distanciaKm": 2100, "aeronaves": ["Avión Comercial"],                   "costoBase": -1, "estanciaMinima": 180 },
+    { "origen": "BOG", "destino": "CTG", "distanciaKm": 1100, "aeronaves": ["Avión Comercial"],                   "costoBase": -1, "estanciaMinima": 120 }
   ]
 }
