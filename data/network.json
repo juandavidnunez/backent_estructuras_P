@@ -22,8 +22,8 @@
       ],
       "trabajos": [
         { "nombre": "Asistente de rampa",   "tarifaHora": 6.5, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.0, "maxHoras": 6 },
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 7.0, "maxHoras": 4 }
+        { "nombre": "Barista en cafetería", "tarifaHora": 5.5, "maxHoras": 6 },
+        { "nombre": "Traductor de documentos",   "tarifaHora": 9.0, "maxHoras": 4 }
       ]
     },
     {
@@ -37,8 +37,8 @@
         { "nombre": "Tour Pueblito Paisa", "tipo": "opcional", "duracionMin": 120, "costoUSD": 10.0 }
       ],
       "trabajos": [
-        { "nombre": "Guía de aeropuerto", "tarifaHora": 7.0, "maxHoras": 6 },
-        { "nombre": "Maletero",           "tarifaHora": 5.5, "maxHoras": 8 }
+        { "nombre": "Instructor de danza folklórica", "tarifaHora": 8.0, "maxHoras": 5 },
+        { "nombre": "Diseñador gráfico freelance",    "tarifaHora": 10.0, "maxHoras": 6 }
       ]
     },
     {
@@ -51,8 +51,8 @@
         { "nombre": "Zoológico de Cali",      "tipo": "opcional", "duracionMin": 180, "costoUSD": 10.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente administrativo", "tarifaHora": 6.0, "maxHoras": 6 },
-        { "nombre": "Cargador de equipaje",     "tarifaHora": 5.0, "maxHoras": 8 }
+        { "nombre": "Instructor de salsa", "tarifaHora": 7.5, "maxHoras": 5 },
+        { "nombre": "Vendedor de artesanías",     "tarifaHora": 6.0, "maxHoras": 8 }
       ]
     },
     {
@@ -65,8 +65,8 @@
         { "nombre": "Playas de Bocagrande",     "tipo": "opcional", "duracionMin": 240, "costoUSD": 5.0  }
       ],
       "trabajos": [
-        { "nombre": "Guía turístico",     "tarifaHora": 8.0, "maxHoras": 6 },
-        { "nombre": "Maletero",           "tarifaHora": 5.0, "maxHoras": 8 }
+        { "nombre": "Fotógrafo de turistas",     "tarifaHora": 9.0, "maxHoras": 6 },
+        { "nombre": "Vendedor de artesanías caribeñas",           "tarifaHora": 6.5, "maxHoras": 8 }
       ]
     },
     {
@@ -79,8 +79,8 @@
         { "nombre": "Puerto Colombia",                  "tipo": "opcional", "duracionMin": 90,  "costoUSD": 5.0  }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 6.0, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.0, "maxHoras": 6 }
+        { "nombre": "Músico de vallenato",   "tarifaHora": 7.0, "maxHoras": 6 },
+        { "nombre": "Chef de comida costeña", "tarifaHora": 8.5, "maxHoras": 5 }
       ]
     },
     {
@@ -94,8 +94,8 @@
         { "nombre": "Tour Barranco",      "tipo": "opcional", "duracionMin": 150, "costoUSD": 10.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa", "tarifaHora": 7.5, "maxHoras": 8 },
-        { "nombre": "Guía de aeropuerto", "tarifaHora": 8.0, "maxHoras": 6 }
+        { "nombre": "Guía de turismo gastronómico", "tarifaHora": 10.0, "maxHoras": 6 },
+        { "nombre": "Profesor de cocina peruana", "tarifaHora": 11.0, "maxHoras": 5 }
       ]
     },
     {
@@ -108,8 +108,8 @@
         { "nombre": "Sacsayhuamán",        "tipo": "opcional", "duracionMin": 180, "costoUSD": 12.0 }
       ],
       "trabajos": [
-        { "nombre": "Guía turístico", "tarifaHora": 9.0, "maxHoras": 6 },
-        { "nombre": "Maletero",       "tarifaHora": 5.5, "maxHoras": 8 }
+        { "nombre": "Guía de expedición a Machu Picchu", "tarifaHora": 12.0, "maxHoras": 6 },
+        { "nombre": "Artesano textil andino",       "tarifaHora": 8.0, "maxHoras": 8 }
       ]
     },
     {
@@ -122,8 +122,8 @@
         { "nombre": "Cañón del Colca",       "tipo": "opcional", "duracionMin": 480, "costoUSD": 35.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 6.5, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.0, "maxHoras": 6 }
+        { "nombre": "Guía de turismo arqueológico",   "tarifaHora": 10.5, "maxHoras": 6 },
+        { "nombre": "Vendedor de productos de alpaca", "tarifaHora": 7.0, "maxHoras": 7 }
       ]
     },
     {
@@ -136,8 +136,8 @@
         { "nombre": "Las Peñas",     "tipo": "opcional", "duracionMin": 90,  "costoUSD": 0.0 }
       ],
       "trabajos": [
-        { "nombre": "Maletero",          "tarifaHora": 5.0, "maxHoras": 8 },
-        { "nombre": "Cargador de carga", "tarifaHora": 5.5, "maxHoras": 6 }
+        { "nombre": "Vendedor de productos de cacao",          "tarifaHora": 6.5, "maxHoras": 7 },
+        { "nombre": "Chef de mariscos ecuatorianos", "tarifaHora": 9.0, "maxHoras": 5 }
       ]
     },
     {
@@ -150,8 +150,8 @@
         { "nombre": "Mitad del Mundo",   "tipo": "opcional", "duracionMin": 180, "costoUSD": 10.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente administrativo", "tarifaHora": 6.5, "maxHoras": 6 },
-        { "nombre": "Asistente de rampa",       "tarifaHora": 7.0, "maxHoras": 8 }
+        { "nombre": "Consultor de desarrollo sostenible", "tarifaHora": 11.0, "maxHoras": 6 },
+        { "nombre": "Instructor de biodiversidad andina",       "tarifaHora": 9.5, "maxHoras": 5 }
       ]
     },
     {
@@ -165,8 +165,8 @@
         { "nombre": "Tour Valparaíso",      "tipo": "opcional", "duracionMin": 360, "costoUSD": 25.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 8.0, "maxHoras": 8 },
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 9.0, "maxHoras": 6 }
+        { "nombre": "Sommelier de vinos chilenos",   "tarifaHora": 12.0, "maxHoras": 5 },
+        { "nombre": "Guía de tours a viñedos",   "tarifaHora": 11.0, "maxHoras": 6 }
       ]
     },
     {
@@ -179,8 +179,8 @@
         { "nombre": "Valle de la Luna",     "tipo": "opcional", "duracionMin": 240, "costoUSD": 20.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 7.0, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.5, "maxHoras": 6 }
+        { "nombre": "Guía de turismo minero",   "tarifaHora": 10.0, "maxHoras": 6 },
+        { "nombre": "Vendedor de artesanía del desierto", "tarifaHora": 7.5, "maxHoras": 7 }
       ]
     },
     {
@@ -194,8 +194,8 @@
         { "nombre": "Tour Palermo",      "tipo": "opcional", "duracionMin": 180, "costoUSD": 10.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 7.5, "maxHoras": 8 },
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 8.5, "maxHoras": 6 }
+        { "nombre": "Instructor de tango",   "tarifaHora": 11.0, "maxHoras": 5 },
+        { "nombre": "Chef de parrilla argentina",   "tarifaHora": 10.0, "maxHoras": 6 }
       ]
     },
     {
@@ -208,8 +208,8 @@
         { "nombre": "Cerro Aconcagua",      "tipo": "opcional", "duracionMin": 480, "costoUSD": 30.0 }
       ],
       "trabajos": [
-        { "nombre": "Maletero",             "tarifaHora": 6.0, "maxHoras": 8 },
-        { "nombre": "Asistente de rampa",   "tarifaHora": 7.0, "maxHoras": 6 }
+        { "nombre": "Sommelier de vinos mendocinos",             "tarifaHora": 11.5, "maxHoras": 5 },
+        { "nombre": "Guía de turismo de montaña",   "tarifaHora": 10.5, "maxHoras": 6 }
       ]
     },
     {
@@ -222,8 +222,8 @@
         { "nombre": "Rambla Sur",         "tipo": "opcional", "duracionMin": 90,  "costoUSD": 0.0  }
       ],
       "trabajos": [
-        { "nombre": "Maletero",             "tarifaHora": 6.0, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.5, "maxHoras": 6 }
+        { "nombre": "Instructor de candombe",             "tarifaHora": 8.0, "maxHoras": 6 },
+        { "nombre": "Chef de asado uruguayo", "tarifaHora": 9.0, "maxHoras": 5 }
       ]
     },
     {
@@ -236,8 +236,8 @@
         { "nombre": "Bahía de Asunción", "tipo": "opcional", "duracionMin": 90,  "costoUSD": 0.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente administrativo", "tarifaHora": 4.5, "maxHoras": 8 },
-        { "nombre": "Maletero",                 "tarifaHora": 4.0, "maxHoras": 6 }
+        { "nombre": "Artesano de ñandutí", "tarifaHora": 6.0, "maxHoras": 7 },
+        { "nombre": "Músico de arpa paraguaya",                 "tarifaHora": 7.0, "maxHoras": 5 }
       ]
     },
     {
@@ -251,8 +251,8 @@
         { "nombre": "Museu do Ipiranga",   "tipo": "opcional", "duracionMin": 120, "costoUSD": 8.0  }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 8.0, "maxHoras": 8 },
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 9.5, "maxHoras": 6 }
+        { "nombre": "Consultor de negocios internacionales",   "tarifaHora": 13.0, "maxHoras": 6 },
+        { "nombre": "Chef de cocina paulista",   "tarifaHora": 10.5, "maxHoras": 5 }
       ]
     },
     {
@@ -266,8 +266,8 @@
         { "nombre": "Pão de Açúcar",       "tipo": "opcional", "duracionMin": 240, "costoUSD": 30.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 8.5, "maxHoras": 8 },
-        { "nombre": "Maletero",             "tarifaHora": 6.5, "maxHoras": 6 }
+        { "nombre": "Instructor de samba",   "tarifaHora": 10.0, "maxHoras": 5 },
+        { "nombre": "Guía de turismo carioca",             "tarifaHora": 11.5, "maxHoras": 6 }
       ]
     },
     {
@@ -280,8 +280,8 @@
         { "nombre": "Catedral de Brasília","tipo": "opcional", "duracionMin": 90,  "costoUSD": 5.0  }
       ],
       "trabajos": [
-        { "nombre": "Asistente administrativo", "tarifaHora": 7.0, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje",     "tarifaHora": 5.5, "maxHoras": 6 }
+        { "nombre": "Consultor de políticas públicas", "tarifaHora": 12.0, "maxHoras": 6 },
+        { "nombre": "Arquitecto especialista en Niemeyer",     "tarifaHora": 13.5, "maxHoras": 5 }
       ]
     },
     {
@@ -294,8 +294,8 @@
         { "nombre": "Centro de Artesanato","tipo": "opcional","duracionMin": 90,  "costoUSD": 5.0 }
       ],
       "trabajos": [
-        { "nombre": "Maletero",           "tarifaHora": 5.5, "maxHoras": 8 },
-        { "nombre": "Asistente de rampa", "tarifaHora": 6.5, "maxHoras": 6 }
+        { "nombre": "Vendedor de artesanías de playa",           "tarifaHora": 6.5, "maxHoras": 7 },
+        { "nombre": "Chef de cocina nordestina", "tarifaHora": 8.5, "maxHoras": 5 }
       ]
     },
     {
@@ -308,8 +308,8 @@
         { "nombre": "Centro histórico",        "tipo": "opcional","duracionMin": 150, "costoUSD": 5.0  }
       ],
       "trabajos": [
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 6.0, "maxHoras": 6 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 4.5, "maxHoras": 8 }
+        { "nombre": "Guía de turismo histórico",   "tarifaHora": 7.5, "maxHoras": 6 },
+        { "nombre": "Vendedor de productos de cacao venezolano", "tarifaHora": 6.0, "maxHoras": 7 }
       ]
     },
     {
@@ -322,8 +322,8 @@
         { "nombre": "Casco Viejo",           "tipo": "opcional", "duracionMin": 180, "costoUSD": 8.0  }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 8.0, "maxHoras": 8 },
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 9.0, "maxHoras": 6 }
+        { "nombre": "Consultor de comercio internacional",   "tarifaHora": 13.0, "maxHoras": 6 },
+        { "nombre": "Chef de cocina panameña",   "tarifaHora": 10.0, "maxHoras": 5 }
       ]
     },
     {
@@ -336,8 +336,8 @@
         { "nombre": "Ruta de las Flores","tipo": "opcional", "duracionMin": 240, "costoUSD": 15.0 }
       ],
       "trabajos": [
-        { "nombre": "Maletero",             "tarifaHora": 5.5, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.0, "maxHoras": 6 }
+        { "nombre": "Guía de turismo volcánico",             "tarifaHora": 9.0, "maxHoras": 6 },
+        { "nombre": "Artesano de productos salvadoreños", "tarifaHora": 6.5, "maxHoras": 7 }
       ]
     },
     {
@@ -350,8 +350,8 @@
         { "nombre": "Centro histórico",  "tipo": "opcional", "duracionMin": 120, "costoUSD": 5.0  }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 5.0, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 4.5, "maxHoras": 6 }
+        { "nombre": "Guía de ecoturismo de lagos",   "tarifaHora": 8.0, "maxHoras": 6 },
+        { "nombre": "Chef de comida nicaragüense", "tarifaHora": 7.0, "maxHoras": 5 }
       ]
     },
     {
@@ -364,8 +364,8 @@
         { "nombre": "Parque Braulio Carrillo","tipo": "opcional","duracionMin": 240,"costoUSD": 12.0 }
       ],
       "trabajos": [
-        { "nombre": "Guía turístico",     "tarifaHora": 8.5, "maxHoras": 6 },
-        { "nombre": "Maletero",           "tarifaHora": 6.0, "maxHoras": 8 }
+        { "nombre": "Guía de biodiversidad tropical",     "tarifaHora": 10.5, "maxHoras": 6 },
+        { "nombre": "Barista de café costarricense",           "tarifaHora": 8.0, "maxHoras": 7 }
       ]
     },
     {
@@ -378,8 +378,8 @@
         { "nombre": "Tour en almendron", "tipo": "opcional", "duracionMin": 120, "costoUSD": 20.0 }
       ],
       "trabajos": [
-        { "nombre": "Guía turístico",     "tarifaHora": 7.0, "maxHoras": 6 },
-        { "nombre": "Asistente de rampa", "tarifaHora": 5.5, "maxHoras": 8 }
+        { "nombre": "Músico de son cubano",     "tarifaHora": 8.5, "maxHoras": 5 },
+        { "nombre": "Chef de cocina criolla cubana", "tarifaHora": 9.0, "maxHoras": 6 }
       ]
     },
     {
@@ -392,8 +392,8 @@
         { "nombre": "Playa Bávaro",      "tipo": "opcional", "duracionMin": 360, "costoUSD": 0.0  }
       ],
       "trabajos": [
-        { "nombre": "Maletero",             "tarifaHora": 5.5, "maxHoras": 8 },
-        { "nombre": "Cargador de equipaje", "tarifaHora": 5.0, "maxHoras": 6 }
+        { "nombre": "Instructor de merengue",             "tarifaHora": 8.0, "maxHoras": 5 },
+        { "nombre": "Chef de cocina dominicana", "tarifaHora": 8.5, "maxHoras": 6 }
       ]
     },
     {
@@ -407,8 +407,8 @@
         { "nombre": "Tour Xochimilco",    "tipo": "opcional", "duracionMin": 240, "costoUSD": 15.0 }
       ],
       "trabajos": [
-        { "nombre": "Asistente de rampa",   "tarifaHora": 7.5, "maxHoras": 8 },
-        { "nombre": "Guía de aeropuerto",   "tarifaHora": 8.5, "maxHoras": 6 }
+        { "nombre": "Consultor de negocios LATAM",   "tarifaHora": 12.5, "maxHoras": 6 },
+        { "nombre": "Chef de cocina mexicana contemporánea",   "tarifaHora": 11.0, "maxHoras": 5 }
       ]
     },
     {
@@ -421,8 +421,8 @@
         { "nombre": "Tequila (pueblo)",  "tipo": "opcional", "duracionMin": 360, "costoUSD": 25.0 }
       ],
       "trabajos": [
-        { "nombre": "Maletero",             "tarifaHora": 6.0, "maxHoras": 8 },
-        { "nombre": "Asistente de rampa",   "tarifaHora": 7.0, "maxHoras": 6 }
+        { "nombre": "Bartender de tequila",             "tarifaHora": 9.5, "maxHoras": 6 },
+        { "nombre": "Mariachi profesional",   "tarifaHora": 11.0, "maxHoras": 5 }
       ]
     },
     {
@@ -435,8 +435,8 @@
         { "nombre": "Mercado de brujas", "tipo": "opcional", "duracionMin": 90,  "costoUSD": 0.0  }
       ],
       "trabajos": [
-        { "nombre": "Cargador de equipaje", "tarifaHora": 4.5, "maxHoras": 8 },
-        { "nombre": "Asistente de rampa",   "tarifaHora": 5.0, "maxHoras": 6 }
+        { "nombre": "Guía de turismo de altura", "tarifaHora": 8.5, "maxHoras": 6 },
+        { "nombre": "Vendedor de textiles andinos",   "tarifaHora": 6.5, "maxHoras": 7 }
       ]
     },
     {
@@ -449,8 +449,8 @@
         { "nombre": "Jardín Zoológico",     "tipo": "opcional","duracionMin": 120, "costoUSD": 5.0 }
       ],
       "trabajos": [
-        { "nombre": "Maletero",             "tarifaHora": 4.5, "maxHoras": 8 },
-        { "nombre": "Cargador de carga",    "tarifaHora": 4.0, "maxHoras": 6 }
+        { "nombre": "Guía de turismo amazónico",             "tarifaHora": 9.0, "maxHoras": 6 },
+        { "nombre": "Chef de cocina cruceña",    "tarifaHora": 7.5, "maxHoras": 5 }
       ]
     }
   ],

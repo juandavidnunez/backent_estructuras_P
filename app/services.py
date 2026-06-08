@@ -163,20 +163,36 @@ class SkyRouteService:
         return rec
 
     def get_flights(self, session_id: str) -> list[FlightOption]:
+        """Get all available flights from current airport, excluding blocked routes and visited airports."""
         rec = self._get_session(session_id)
         options: list[FlightOption] = []
+        
+        # Get all non-blocked neighbors
         for edge in self.graph.neighbours(rec.current_airport):
             dest = edge.dest
+            
+            # Skip already-visited airports (no repeated nodes)
             if dest in rec.visited:
                 continue
+            
+            # Build aircraft options for this route
             ac_opts = []
             for ac in self.graph.allowed_aircraft(edge, list(self.graph.aircraft_config.keys())):
                 cost = edge.costs_by_aircraft.get(ac, 0.0)
                 time_min = edge.times_by_aircraft.get(ac, 0.0)
-                ac_opts.append({"aircraft_type": ac, "cost_usd": cost, "time_min": time_min})
+                
+                # Check budget and time constraints
+                hours = time_min / 60.0
+                if cost <= rec.budget_remaining and hours <= rec.time_remaining_hours:
+                    ac_opts.append({"aircraft_type": ac, "cost_usd": cost, "time_min": time_min})
+            
+            # Skip routes where no aircraft is affordable/feasible
             if not ac_opts:
                 continue
+            
+            # Select cheapest aircraft as recommended
             recommended = min(ac_opts, key=lambda x: (x["cost_usd"], x["time_min"]))
+            
             from app.models import AircraftOption
             options.append(FlightOption(
                 dest=dest,
@@ -186,6 +202,13 @@ class SkyRouteService:
                 aircraft_options=[AircraftOption(**o) for o in ac_opts],
                 recommended_aircraft=AircraftOption(**recommended),
             ))
+        
+        # Log for debugging
+        print(f"✓ Vuelos disponibles desde {rec.current_airport}: {len(options)} opciones")
+        if len(options) == 0:
+            print(f"  ⚠ No hay vuelos disponibles. Aeropuertos visitados: {rec.visited}")
+            print(f"  ⚠ Presupuesto: ${rec.budget_remaining:.2f}, Tiempo: {rec.time_remaining_hours:.2f}h")
+        
         return options
 
     def get_activities(self, session_id: str) -> list[ActivityOption]:
@@ -347,61 +370,83 @@ class SkyRouteService:
         )
 
     def _apply_mandatory_costs(self, rec: SessionRecord, hours_elapsed: float) -> list[str]:
+        """Apply mandatory food and lodging costs based on elapsed time."""
         events: list[str] = []
         airport = self.graph.airports[rec.current_airport]
         rec.hours_since_lodging += hours_elapsed
         rec.hours_since_food += hours_elapsed
         rec.stay_time_at_airport[rec.current_airport] = rec.stay_time_at_airport.get(rec.current_airport, 0) + hours_elapsed * 60
 
+        # Process food charges (every 8 hours)
         while rec.hours_since_food >= self.graph.food_interval_hours:
             rec.budget_remaining -= airport.food_cost
             rec.cost_at_airport[rec.current_airport] = rec.cost_at_airport.get(rec.current_airport, 0) + airport.food_cost
             rec.hours_since_food -= self.graph.food_interval_hours
             events.append(f"🍽 Alimentación obligatoria en {rec.current_airport} (-${airport.food_cost:.2f})")
 
+        # Process lodging charges (every 20 hours)
         while rec.hours_since_lodging >= self.graph.lodging_interval_hours:
             rec.budget_remaining -= airport.lodging_cost
             rec.cost_at_airport[rec.current_airport] = rec.cost_at_airport.get(rec.current_airport, 0) + airport.lodging_cost
             rec.hours_since_lodging -= self.graph.lodging_interval_hours
             events.append(f"🏨 Alojamiento obligatorio en {rec.current_airport} (-${airport.lodging_cost:.2f})")
 
+        # Validation: Log if mandatory costs were applied
+        if events:
+            print(f"✓ Sistema de recaudo activo - {len(events)} evento(s) aplicado(s)")
+            print(f"  Presupuesto restante: ${rec.budget_remaining:.2f}")
+            print(f"  Horas desde última comida: {rec.hours_since_food:.1f}h")
+            print(f"  Horas desde último alojamiento: {rec.hours_since_lodging:.1f}h")
+
         return events
 
     def fly(self, session_id: str, dest: str, aircraft_type: str) -> FlyResult:
         rec = self._get_session(session_id)
         edge = self.graph.get_edge(rec.current_airport, dest)
+        
+        # Verificar que la ruta existe y no está bloqueada
         if not edge:
-            raise ValueError(f"No route from {rec.current_airport} to {dest}")
+            # Verificar si existe la ruta pero está bloqueada
+            if self.graph.edge_exists(rec.current_airport, dest) and self.graph.is_blocked(rec.current_airport, dest):
+                raise ValueError(f"La ruta de {rec.current_airport} a {dest} está bloqueada")
+            raise ValueError(f"No existe ruta de {rec.current_airport} a {dest}")
+        
         if aircraft_type not in edge.costs_by_aircraft:
-            raise ValueError(f"Aircraft {aircraft_type} not available on this route")
+            raise ValueError(f"Aeronave {aircraft_type} no disponible en esta ruta")
 
         cost = edge.costs_by_aircraft[aircraft_type]
         time_min = edge.times_by_aircraft[aircraft_type]
 
-        # Subsidized distance cap: max 20% of total trip distance
+        # Validar límite de distancia subsidiada (20% del total)
         if edge.is_subsidized:
             max_sub = rec.total_distance_km * 0.20 if rec.total_distance_km > 0 else edge.distance_km
             if rec.subsidized_km + edge.distance_km > max_sub and rec.total_distance_km > 0:
-                raise ValueError("Subsidized route would exceed 20% distance limit")
+                raise ValueError("La ruta subsidiada excedería el límite del 20% de la distancia total")
 
+        # Validar restricciones presupuestarias
         if cost > rec.budget_remaining:
-            raise ValueError("Insufficient budget for this flight")
+            raise ValueError(f"Presupuesto insuficiente. Requerido: ${cost:.2f}, Disponible: ${rec.budget_remaining:.2f}")
+        
         hours = time_min / 60.0
         if hours > rec.time_remaining_hours:
-            raise ValueError("Insufficient time for this flight")
+            raise ValueError(f"Tiempo insuficiente. Requerido: {hours:.2f}h, Disponible: {rec.time_remaining_hours:.2f}h")
 
+        # Construir segmento del viaje
         cum_cost = sum(s.cost_usd for s in rec.segments) + cost
         cum_time = sum(s.flight_time_min for s in rec.segments) + time_min
         segment = self.graph.build_segment(edge, aircraft_type, cum_cost - cost, cum_time - time_min)
 
+        # Actualizar estado de la sesión
         rec.budget_remaining -= cost
         rec.time_remaining_hours -= hours
         rec.total_distance_km += edge.distance_km
         if edge.is_subsidized:
             rec.subsidized_km += edge.distance_km
 
+        # Aplicar costos obligatorios (comida y alojamiento)
         mandatory = self._apply_mandatory_costs(rec, hours)
 
+        # Registrar el segmento y actualizar ubicación
         rec.segments.append(segment)
         rec.current_airport = dest
         if dest not in rec.visited:
@@ -409,6 +454,12 @@ class SkyRouteService:
         rec.stay_time_at_airport.setdefault(dest, 0.0)
         rec.cost_at_airport.setdefault(dest, 0.0)
         rec.cost_at_airport[dest] = rec.cost_at_airport.get(dest, 0) + cost
+
+        # Log de verificación
+        print(f"✓ Vuelo exitoso: {segment.origin} → {segment.dest}")
+        print(f"  Costo: ${cost:.2f} | Tiempo: {hours:.2f}h")
+        print(f"  Presupuesto restante: ${rec.budget_remaining:.2f}")
+        print(f"  Aeropuertos visitados: {len(rec.visited)}")
 
         return FlyResult(
             segment=segment,
@@ -486,10 +537,74 @@ class SkyRouteService:
 
     # ── R4 ──────────────────────────────────────────────────────────────────
 
-    def block_route(self, origin: str, dest: str) -> None:
+    def block_route(self, origin: str, dest: str, session_id: str | None = None) -> dict:
+        """
+        Block a route and handle in-flight diversions if necessary.
+        
+        Returns dict with:
+            - blocked: bool
+            - in_transit_detected: bool
+            - diverted_to: str | None (emergency diversion airport)
+            - original_dest: str | None
+        """
         if not self.graph.edge_exists(origin, dest):
             raise ValueError(f"Route {origin}→{dest} does not exist")
+        
+        result = {
+            "blocked": False,
+            "in_transit_detected": False,
+            "diverted_to": None,
+            "original_dest": None,
+        }
+        
+        # Check if any active session is currently flying this route
+        if session_id:
+            rec = self.sessions.get(session_id)
+            if rec and not rec.ended and len(rec.segments) > 0:
+                last_segment = rec.segments[-1]
+                # Check if last segment destination hasn't been visited yet (in transit)
+                if last_segment.dest not in rec.visited and last_segment.origin == origin and last_segment.dest == dest:
+                    result["in_transit_detected"] = True
+                    result["original_dest"] = dest
+                    
+                    # Find emergency diversion - try to find closest available airport
+                    diversion_found = False
+                    
+                    # Try to return to origin first
+                    if not self.graph.is_blocked(origin, origin):
+                        result["diverted_to"] = origin
+                        diversion_found = True
+                    
+                    # If origin not possible, find another nearby airport
+                    if not diversion_found:
+                        for edge in self.graph.neighbours(origin):
+                            if edge.dest not in rec.visited and not self.graph.is_blocked(origin, edge.dest):
+                                result["diverted_to"] = edge.dest
+                                diversion_found = True
+                                break
+                    
+                    # If still no diversion, allow return to origin as emergency
+                    if not diversion_found:
+                        result["diverted_to"] = origin
+                    
+                    # Update session to reflect emergency diversion
+                    if result["diverted_to"] == origin:
+                        # Return to origin - cancel last segment
+                        rec.segments.pop()
+                        rec.current_airport = origin
+                    else:
+                        # Divert to alternative airport
+                        rec.current_airport = result["diverted_to"]
+                        if result["diverted_to"] not in rec.visited:
+                            rec.visited.append(result["diverted_to"])
+                        # Update last segment to reflect diversion
+                        rec.segments[-1].dest = result["diverted_to"]
+        
+        # Block the route
         self.graph.block_edge(origin, dest)
+        result["blocked"] = True
+        
+        return result
 
     def unblock_route(self, origin: str, dest: str) -> None:
         self.graph.unblock_edge(origin, dest)

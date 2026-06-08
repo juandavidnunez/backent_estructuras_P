@@ -20,12 +20,14 @@ def _resolve_network_path(path: str | None) -> Path:
         return Path(path)
     here = Path(__file__).resolve().parent.parent
     candidates = [
+        here / "data" / "network.json",
         here / "network.json",
         here.parent / "skyroute-frontend" / "public" / "network.json",
     ]
     for c in candidates:
         if c.exists():
             return c
+    # Si no se encuentra, retornar la primera candidata (data/network.json)
     return candidates[0]
 
 

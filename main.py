@@ -163,8 +163,8 @@ def dynamic_end(body: EndSessionRequest):
 
 @app.post("/api/v1/events/block-route")
 def events_block(body: BlockRouteRequest):
-    service.block_route(body.origin, body.dest)
-    return ok({"blocked": True})
+    result = service.block_route(body.origin, body.dest, body.session_id if hasattr(body, 'session_id') else None)
+    return ok(result)
 
 
 @app.post("/api/v1/events/unblock-route")
