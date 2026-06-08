@@ -1,68 +1,200 @@
-"""
-SkyRoute Planner — FastAPI application entry point.
+"""FastAPI application — SkyRoute Planner backend."""
+from __future__ import annotations
 
-Registers all routers, configures CORS, and loads the graph at startup.
-Run with: uvicorn main:app --reload
-"""
+import os
 
-from contextlib import asynccontextmanager
-
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-import api.state as state
-from api.router_events import router as events_router
-from api.router_graph import router as graph_router
-from api.router_dynamic import router as dynamic_router
-from api.router_plan import router as plan_router
-from api.router_report import router as report_router
-from config import API_PREFIX, CORS_ORIGINS, JSON_NETWORK_PATH
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Load the graph from disk when the server starts."""
-    try:
-        from features.loader import load_network
-        state.graph = load_network(JSON_NETWORK_PATH)
-        print(f"Graph loaded: {state.graph}")
-    except Exception as exc:
-        print(f"Warning: Could not load graph at startup: {exc}")
-        print("Use GET /api/v1/graph/load to load it manually.")
-    yield
-
-
-app = FastAPI(
-    title="SkyRoute Planner API",
-    description="Backend for the SkyRoute Planner — Estructuras de Datos, Universidad de Caldas",
-    version="1.0.0",
-    lifespan=lifespan,
+from app.models import (
+    ActivityRequest,
+    ApiResponse,
+    BestRouteRequest,
+    BlockRouteRequest,
+    EndSessionRequest,
+    FlyRequest,
+    ItineraryRequest,
+    JobRequest,
+    RecalculateRequest,
+    StartSessionRequest,
+    UnblockRouteRequest,
 )
+from app.services import SkyRouteService
 
-# ---------------------------------------------------------------------------
-# CORS — allow Vue.js frontend to connect
-# ---------------------------------------------------------------------------
+NETWORK_PATH = os.environ.get("NETWORK_JSON_PATH")
+service = SkyRouteService(NETWORK_PATH)
+
+app = FastAPI(title="SkyRoute Planner API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------------------------------
-# Router registration
-# ---------------------------------------------------------------------------
 
-app.include_router(graph_router,   prefix=f"{API_PREFIX}/graph",   tags=["R1 — Graph"])
-app.include_router(plan_router,    prefix=f"{API_PREFIX}/plan",    tags=["R2 — Planning"])
-app.include_router(dynamic_router, prefix=f"{API_PREFIX}/dynamic", tags=["R3 — Dynamic"])
-app.include_router(events_router,  prefix=f"{API_PREFIX}/events",  tags=["R4 — Interruptions"])
-app.include_router(report_router,  prefix=f"{API_PREFIX}/report",  tags=["R5 — Reports"])
+def ok(data):
+    return {"data": data, "error": None}
 
 
-@app.get("/", tags=["Health"])
-def root():
-    """Health check endpoint."""
-    return {"status": "ok", "message": "SkyRoute Planner API is running"}
+def fail(msg: str, status: int = 400):
+    raise HTTPException(status_code=status, detail={"data": None, "error": msg})
+
+
+@app.exception_handler(HTTPException)
+async def http_exc_handler(request, exc: HTTPException):
+    from fastapi.responses import JSONResponse
+    if isinstance(exc.detail, dict):
+        return JSONResponse(status_code=exc.status_code, content=exc.detail)
+    return JSONResponse(status_code=exc.status_code, content={"data": None, "error": str(exc.detail)})
+
+
+@app.exception_handler(ValueError)
+async def value_error_handler(request, exc: ValueError):
+    from fastapi.responses import JSONResponse
+    return JSONResponse(status_code=400, content={"data": None, "error": str(exc)})
+
+
+# ── R1 Graph ────────────────────────────────────────────────────────────────
+
+@app.get("/api/v1/graph/load")
+def graph_load():
+    return ok(service.summary())
+
+
+@app.get("/api/v1/graph/status")
+def graph_status():
+    return ok(service.summary())
+
+
+@app.get("/api/v1/graph/nodes")
+def graph_nodes():
+    return ok(list(service.graph.airports.values()))
+
+
+@app.get("/api/v1/graph/nodes/{node_id}")
+def graph_node(node_id: str):
+    ap = service.graph.airports.get(node_id)
+    if not ap:
+        fail(f"Airport {node_id} not found", 404)
+    return ok(ap)
+
+
+@app.get("/api/v1/graph/edges")
+def graph_edges():
+    return ok(service.graph.to_route_models())
+
+
+@app.post("/api/v1/graph/reload")
+def graph_reload():
+    service.reload()
+    return ok(service.summary())
+
+
+# ── R2 Planning ─────────────────────────────────────────────────────────────
+
+@app.post("/api/v1/plan/itinerary")
+def plan_itinerary(body: ItineraryRequest):
+    return ok(service.plan_itinerary(
+        body.origin, body.budget_usd, body.time_hours,
+        body.aircraft_types, body.include_secondary,
+    ))
+
+
+@app.post("/api/v1/plan/best-route")
+def plan_best_route(body: BestRouteRequest):
+    return ok(service.best_route(
+        body.origin, body.destination, body.criteria,
+        body.aircraft_types, body.include_secondary,
+    ))
+
+
+# ── R3 Dynamic ──────────────────────────────────────────────────────────────
+
+@app.post("/api/v1/dynamic/start")
+def dynamic_start(body: StartSessionRequest):
+    return ok(service.start_session(body.origin, body.initial_budget, body.time_hours))
+
+
+@app.get("/api/v1/dynamic/flights")
+def dynamic_flights(session_id: str):
+    return ok(service.get_flights(session_id))
+
+
+@app.get("/api/v1/dynamic/activities")
+def dynamic_activities(session_id: str):
+    return ok(service.get_activities(session_id))
+
+
+@app.get("/api/v1/dynamic/jobs")
+def dynamic_jobs(session_id: str):
+    return ok(service.get_jobs(session_id))
+
+
+@app.get("/api/v1/dynamic/suggest")
+def dynamic_suggest(session_id: str):
+    return ok(service.get_suggestion(session_id))
+
+
+@app.post("/api/v1/dynamic/fly")
+def dynamic_fly(body: FlyRequest):
+    return ok(service.fly(body.session_id, body.dest, body.aircraft_type))
+
+
+@app.post("/api/v1/dynamic/activity")
+def dynamic_activity(body: ActivityRequest):
+    return ok(service.do_activity(body.session_id, body.activity_name))
+
+
+@app.post("/api/v1/dynamic/job")
+def dynamic_job(body: JobRequest):
+    return ok(service.do_job(body.session_id, body.job_name, body.hours))
+
+
+@app.post("/api/v1/dynamic/end")
+def dynamic_end(body: EndSessionRequest):
+    service.end_session(body.session_id)
+    return ok({"ended": True})
+
+
+# ── R4 Events ─────────────────────────────────────────────────────────────────
+
+@app.post("/api/v1/events/block-route")
+def events_block(body: BlockRouteRequest):
+    service.block_route(body.origin, body.dest)
+    return ok({"blocked": True})
+
+
+@app.post("/api/v1/events/unblock-route")
+def events_unblock(body: UnblockRouteRequest):
+    service.unblock_route(body.origin, body.dest)
+    return ok({"unblocked": True})
+
+
+@app.post("/api/v1/events/recalculate")
+def events_recalculate(body: RecalculateRequest):
+    return ok(service.recalculate(body.current_node, body.final_destination))
+
+
+@app.get("/api/v1/events/blocked-routes")
+def events_blocked():
+    return ok(service.blocked_routes())
+
+
+# ── R5 Report ─────────────────────────────────────────────────────────────────
+
+@app.get("/api/v1/report/{session_id}")
+def report_full(session_id: str):
+    return ok(service.trip_report(session_id))
+
+
+@app.get("/api/v1/report/{session_id}/summary")
+def report_summary(session_id: str):
+    return ok(service.trip_summary(session_id))
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "nodes": len(service.graph.airports)}
